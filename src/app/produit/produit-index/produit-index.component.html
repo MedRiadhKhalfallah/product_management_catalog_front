@@ -1,0 +1,52 @@
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a routerLink="">Accueil</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Produits</li>
+  </ol>
+</nav>
+<div class="row">
+  <div class="col-lg-12 mb-12 mb-lg-0">
+    <button class="btn btn-primary mb-3" (click)="getDataFromApi()"
+            [disabled]="loadingAPI" style="">
+      Importer produits API
+      <i *ngIf="loadingAPI" class="fa fa-spinner fa-spin"></i>
+    </button>
+    <small *ngIf="loadingAPI" style="margin-top: -10px;" class="form-text text-muted">Cette action peut prendre
+      plusieurs minutes.</small>
+    <div class="text-success" *ngIf="message && !loadingAPI">{{message}}</div>
+  </div>
+</div>
+<div>
+  <app-produit-searsh [loading]="loading" (searchProduit)="loadData($event)"></app-produit-searsh>
+  <br>
+  <div class="mb-2" *ngIf="loading">
+    <progressbar class="progress-striped active" [value]="100" type="warning"><i>Loading ...</i></progressbar>
+  </div>
+
+  <br>
+  <div class="card mb-3" *ngIf="!loading && totalCount">
+    <div class="card-body">
+      <div class="row justify-content-between align-items-center">
+        <div class="col-sm-auto mb-2 mb-sm-0">
+          <h6 class="mb-0">Afficher {{offset}}-{{offset + produitList.length}}: Produits ({{totalCount}}) </h6>
+        </div>
+        <div class="col-sm-auto">
+          <button (click)="changeView()" data-toggle="tooltip"><i [ngClass]="ischangeView ? 'fa fa-th' : 'fa fa-list-ul'"></i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <app-produit-list *ngIf="!loading" [produitList]="produitList" [ischangeView]="ischangeView"></app-produit-list>
+  <div class="row d-flex justify-content-center" style="margin-top: 10px;">
+    <div class="col-xs-12 col-12" class="align-self-center">
+      <pagination *ngIf="totalCount" [(ngModel)]="currentPage"
+                  [boundaryLinks]="showBoundaryLinks"
+                  [totalItems]="totalCount"
+                  [rotate]="false"
+                  [maxSize]="10"
+                  (pageChanged)="pageChanged($event)"></pagination>
+    </div>
+  </div>
+
+</div>

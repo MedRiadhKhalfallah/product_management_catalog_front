@@ -1,0 +1,54 @@
+<div class="card mb-3">
+  <div class="card-header">
+    <h5 class="mb-0">Recherche produit</h5>
+  </div>
+  <div class="card-body bg-light">
+    <div class="row">
+      <div class="col-12">
+        <form #produitSearchForm=ngForm (ngSubmit)="onSubmit()">
+          <div class="row">
+            <div class="col-lg-4">
+              <div class="form-group">
+                <label for="productName">Nom</label>
+                <input class="form-control" id="productName" name="productName" type="text" placeholder="Nom"
+                       [(ngModel)]="form.productName">
+              </div>
+            </div>
+            <div class="col-lg-4">
+              <div class="form-group">
+                <label for="category">Catégorie</label>
+                <select class="form-control" id="category" name="category"
+                        [disabled]="loadingCategory"
+                        [(ngModel)]="form.category">
+                  <option [value]="null"></option>
+                  <option *ngFor="let categorie of categoryList" [value]="categorie.category">
+                    {{categorie.category}}
+                  </option>
+                </select>
+                <i *ngIf="loadingCategory" class="fa fa-spinner fa-spin"></i>
+              </div>
+
+            </div>
+            <div class="col-lg-4">
+              <div class="form-group">
+                <label for="price">Prix</label>
+                <input class="form-control" id="price" name="price" type="number" placeholder="00"
+                       [(ngModel)]="form.price">
+              </div>
+            </div>
+          </div>
+          <button class="btn btn-warning mb-3 float-right" type="submit"
+                  [disabled]="produitSearchForm.invalid || loading" style="margin-left: 10px;">
+            Rechercher
+            <i *ngIf="loading" class="fa fa-spinner fa-spin"></i>
+
+          </button>
+          <button class="btn btn-danger mb-3 float-right"
+                  type="reset" (click)="vide()">
+            Réinitialiser
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,84 @@
+<div class="card-header">
+  <div class="row align-items-center justify-content-between">
+    <div *ngIf="produitList.length == 0">
+      Aucun produit n'a été trouvé pour votre requête de recherche
+    </div>
+    <div class="table-responsive" *ngIf="produitList.length != 0 && ischangeView">
+      <table class="table table-hover table-striped">
+        <thead class="thead-light">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Nom</th>
+          <th scope="col">Catégorie</th>
+          <th scope="col">Prix</th>
+          <th scope="col">Image</th>
+          <th scope="col">Score</th>
+          <th scope="col">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let produit of produitList ; let index = index">
+          <th scope="row">{{produit.id}}</th>
+          <td>{{produit.productName}}</td>
+          <td>{{produit.category}}</td>
+          <td>{{produit.price}}</td>
+          <td><a href="{{produit.imageUrl}}" target="_blank"><img src="{{produit.imageUrl}}" style="max-height: 100px"></a>
+          </td>
+          <td>
+            <span *ngFor="let n of numSequence(produit.averageScore)" class="fa fa-star text-warning fs--1"></span>
+            <span *ngFor="let n of numSequence(5 - produit.averageScore)" class="fa fa-star fs--1"></span>
+
+          </td>
+          <td>
+            <button class="btn btn-info" type="button" (click)="showChildModalView(produit)"
+                    style="margin-right: 2px;"><i class="fa fa-eye" aria-hidden="true"></i>
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card-body bg-light" *ngIf="produitList.length != 0 && !ischangeView">
+      <div class="row">
+        <div class="col-md-6 col-lg-3 col-xl-3 col-xxl-2 col-6 col-sm-6" *ngFor="let produit of produitList" style="padding-bottom: 10px;">
+          <div class="border rounded h-100 d-flex flex-column justify-content-between pb-3">
+            <div class="overflow-hidden" (click)="showChildModalView(produit)">
+              <div class="position-relative rounded-top overflow-hidden">
+                <img class="img-fluid rounded-top" src="{{produit.imageUrl}}"
+                     alt="{{produit.imageUrl}}" style="max-height: 300px;"/>
+              </div>
+              <div class="p-3">
+                <span *ngFor="let n of numSequence(produit.averageScore)" class="fa fa-star text-warning fs--1"></span>
+                <span *ngFor="let n of numSequence(5 - produit.averageScore)" class="fa fa-star fs--1"></span>
+
+                <h5 class="fs-0"><span class="text-dark" id="productName">{{produit.productName}}</span></h5>
+                <p class="fs--1 mb-3">{{produit.category}}</p>
+                <h5 class="d-flex align-items-center">
+                  <span class="text-warning mr-2">{{produit.price}} DT</span>
+                </h5>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div bsModal #childModalView="bs-modal" class="modal fade" tabindex="-1"
+     role="dialog" aria-labelledby="dialog-child-name-view" [config]="{ backdrop: 'static' }">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 id="dialog-child-name-view" class="modal-title pull-left">Afficher produit</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="hideChildModalView()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <app-produit-view *ngIf="produit" [produitId]="produit.id"></app-produit-view>
+      </div>
+    </div>
+  </div>
+</div>
+
